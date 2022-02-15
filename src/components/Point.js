@@ -26,9 +26,9 @@ export const PointComponent = ({ point }) => {
   return (
     <div>
       <div>{point.name}</div>
-      <div className="flex flex-col gap-1">
+      <div className="flex flex-col gap-4">
         {sections.map((section) => (
-          <SectionComponent section={section} />
+          <SectionComponent section={section} newSection={addSection} />
         ))}
         <button onClick={addSection}>New section</button>
       </div>

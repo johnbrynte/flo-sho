@@ -16,3 +16,52 @@
 ::-webkit-scrollbar-thumb:hover {
   background: #bbb;
 }
+
+.ql-editor {
+  @apply relative flex-1 p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400;
+}
+.ql-blank::before {
+  @apply text-gray-400 absolute;
+  content: attr(data-placeholder);
+}
+
+/*TODO see if this can be hidden in some other way*/
+.ql-clipboard {
+  @apply hidden;
+}
+
+.ql-editor h1 {
+  @apply font-bold text-3xl;
+}
+
+.ql-editor h2 {
+  @apply font-bold text-xl;
+}
+
+.ql-editor h3 {
+  @apply font-bold text-base;
+}
+
+.ql-editor h4 {
+  @apply font-bold text-sm italic text-gray-500;
+}
+
+.ql-editor p {
+  @apply whitespace-pre-wrap;
+}
+
+.ql-editor ul {
+  @apply list-disc pl-6;
+}
+
+.ql-editor ol {
+  @apply list-decimal pl-6;
+}
+
+.ql-editor img {
+  @apply rounded-md my-2;
+}
+
+.ql-editor blockquote {
+  @apply border-l-2 border-l-gray-600 pl-2 my-2;
+}

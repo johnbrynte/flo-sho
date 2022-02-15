@@ -50,7 +50,7 @@ export const Timeline = () => {
     <div className="bg-gray-100 p-1 rounded-md">
       <p>Test</p>
       <div
-        className="flex gap-1 px-4 py-10 overflow-x-scroll overscroll-auto touch-none"
+        className="flex gap-4 px-4 py-10 overflow-x-scroll overscroll-auto touch-none"
         {...bind()}
         ref={scrollEl}
         onScroll={onScroll}
