@@ -1,0 +1,95 @@
+html {
+  font-size: 14px;
+}
+
+textarea {
+  border: none;
+  outline: none;
+  padding: 0;
+  width: 100%;
+  resize: none;
+  font-size: 1rem;
+  line-height: 1.4rem;
+}
+
+body,
+textarea {
+  font-family: sans-serif;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0);
+}
+::-webkit-scrollbar-thumb {
+  background: #aaa;
+  border-radius: 5px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #bbb;
+}
+
+.p-1 {
+  padding: 1rem;
+}
+
+.py-2 {
+  padding: 2rem 0;
+}
+
+.py-4 {
+  padding: 4rem 0;
+}
+
+.w-point {
+  width: 22rem;
+}
+
+.h-point {
+  min-height: 8rem;
+}
+
+.bg-white {
+  background-color: #fff;
+}
+
+.bg-gray {
+  background-color: #f0f0f0;
+}
+
+.radius-1 {
+  border-radius: 0.5rem;
+}
+
+.overflow-x-scroll {
+  overflow-x: scroll;
+  overscroll-behavior: auto;
+  touch-action: none;
+}
+
+.flex {
+  display: flex;
+}
+
+.flex-col {
+  flex-direction: column;
+}
+
+.align-stretch {
+  align-items: stretch;
+}
+
+.gap-1 {
+  gap: 1rem;
+}
+
+.block {
+  display: block;
+}
+
+.shrink-0 {
+  flex-shrink: 0;
+}
