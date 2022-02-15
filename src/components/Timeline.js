@@ -6,6 +6,7 @@ export const Timeline = () => {
   const [points, setPoints] = useState(() =>
     [...new Array(10)].map(() =>
       createPoint({
+        name: "Test",
         text:
           "Ut pellentesque eros eu lacinia scelerisque. Cras efficitur vel mauris et egestas. Maecenas in lobortis libero, ut suscipit tellus. Sed non mattis ligula."
       })
@@ -40,14 +41,16 @@ export const Timeline = () => {
   }, [scrollEl]);
 
   const addPoint = () => {
-    setPoints([...points, createPoint()]);
+    setPoints([...points, createPoint({
+      name: "Test",
+    })]);
   };
 
   return (
-    <div className="bg-gray p-1 radius-1">
+    <div className="bg-gray-100 p-1 rounded-md">
       <p>Test</p>
       <div
-        className="flex gap-1 py-4 overflow-x-scroll"
+        className="flex gap-1 px-4 py-10 overflow-x-scroll overscroll-auto touch-none"
         {...bind()}
         ref={scrollEl}
         onScroll={onScroll}

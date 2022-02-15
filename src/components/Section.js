@@ -15,12 +15,15 @@ export const SectionComponent = ({ section }) => {
 
   return (
     <div
-      className="flex align-stretch p-1 radius-1 bg-white shrink-0 w-point h-point"
+      className="flex p-2 rounded-md bg-white flex-shrink-0 w-80"
       onMouseDown={(e) => e.stopPropagation()}
     >
       <Textarea
+        className="w-full resize-none p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
         onChange={(e) => setText(e.target.value)}
         defaultValue={text}
+        placeholder="Your text here..."
+        rows={3}
       />
     </div>
   );
