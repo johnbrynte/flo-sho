@@ -1,8 +1,9 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import TurndownService from "turndown"
 import { marked } from "marked"
 import Quill from 'quill'
 import QuillMarkdown from 'quilljs-markdown'
+import useDebounce from "../hooks/useDebounce";
 
 let SECTION_ID = 0;
 
@@ -13,10 +14,15 @@ export const createSection = ({ text = "" }) => {
   };
 };
 
-export const SectionComponent = ({ section, newSection }) => {
-  const [text, setText] = useState(section.text);
+export const SectionComponent = ({ section, newSection, onUpdate }) => {
   const quill = useRef(null)
   const textareaRef = useRef(null)
+  const updateDebounce = useDebounce((markdown) => {
+    onUpdate({
+      ...section,
+      text: markdown,
+    })
+  }, 1000)
 
   useEffect(() => {
     if (!textareaRef.current) {
@@ -45,10 +51,13 @@ export const SectionComponent = ({ section, newSection }) => {
     }
     const editor = new Quill(textareaRef.current, options)
     editor.on('text-change', onTextChange)
+    editor.root.setAttribute("spellcheck", "false")
     quill.current = editor
 
     const markdownOptions = {}
     const quillMarkdown = new QuillMarkdown(editor, markdownOptions)
+
+    setFromMarkdown(section.text)
   }, [textareaRef])
 
   const onTextChange = (delta, oldDelta, source) => {
@@ -61,7 +70,8 @@ export const SectionComponent = ({ section, newSection }) => {
       headingStyle: 'atx'
     })
     var markdown = turndownService.turndown(quill.current.root.innerHTML)
-    console.log(markdown)
+
+    updateDebounce(markdown)
   }
 
   // from markdown
@@ -70,7 +80,8 @@ export const SectionComponent = ({ section, newSection }) => {
       return
     }
 
-    const html = marked.parse(markdown)
+    // empty lines are not treated well "  \n\n"
+    const html = marked.parse(markdown.replace(/\s\s\n\n/g, "<p><br/></p>\n\n"))
     const delta = quill.current.clipboard.convert(html)
     quill.current.setContents(delta, 'silent')
   }
