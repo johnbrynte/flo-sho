@@ -67,6 +67,10 @@ export const Timeline = () => {
     })]);
   };
 
+  const deletePoint = (point) => {
+    setPoints(points.filter((p) => p.id !== point.id));
+  }
+
   const pointUpdate = (point) => {
     const newPoints = points.map((p) => {
       if (point.id === p.id) {
@@ -90,7 +94,10 @@ export const Timeline = () => {
         onScroll={onScroll}
       >
         {points.map((point) => (
-          <PointComponent key={point.id} point={point} onUpdate={pointUpdate} />
+          <PointComponent key={point.id}
+            point={point}
+            onUpdate={pointUpdate}
+            onDelete={deletePoint} />
         ))}
       </div>
       <button onClick={addPoint}>New point</button>

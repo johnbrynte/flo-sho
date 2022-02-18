@@ -4,8 +4,9 @@ import { marked } from "marked"
 import Quill from 'quill'
 import QuillMarkdown from 'quilljs-markdown'
 import useDebounce from "../hooks/useDebounce";
+import { FiTrash2 } from "react-icons/fi";
 
-let SECTION_ID = 0;
+let SECTION_ID = Date.now();
 
 export const createSection = ({ text = "" }) => {
   return {
@@ -14,7 +15,7 @@ export const createSection = ({ text = "" }) => {
   };
 };
 
-export const SectionComponent = ({ section, newSection, onUpdate }) => {
+export const SectionComponent = ({ section, newSection, onUpdate, onDelete }) => {
   const quill = useRef(null)
   const textareaRef = useRef(null)
   const updateDebounce = useDebounce((markdown) => {
@@ -22,7 +23,7 @@ export const SectionComponent = ({ section, newSection, onUpdate }) => {
       ...section,
       text: markdown,
     })
-  }, 1000)
+  }, 500)
 
   useEffect(() => {
     if (!textareaRef.current) {
@@ -88,13 +89,21 @@ export const SectionComponent = ({ section, newSection, onUpdate }) => {
 
   return (
     <div
-      className="flex flex-col p-2 rounded-md bg-white flex-shrink-0 w-80"
+      className="flex flex-col px-2 pt-2 pb-1 rounded-md bg-white flex-shrink-0 w-80"
       onMouseDown={(e) => e.stopPropagation()}
     >
       <div
         className="flex flex-col items-stretch w-full min-h-20"
         ref={textareaRef}
       />
+      <div className="flex justify-end mt-1 opacity-30 hover:opacity-100">
+        <div className="">
+          <button className="flex items-center justify-center w-6 h-6 rounded-sm hover:bg-gray-200"
+            onClick={() => onDelete(section)}>
+            <FiTrash2 />
+          </button>
+        </div>
+      </div>
     </div>
   );
 };
