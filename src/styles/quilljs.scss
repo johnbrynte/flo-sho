@@ -1,0 +1,61 @@
+.ql-editor {
+  @apply relative flex-1 p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-400;
+}
+
+.ql-blank::before {
+  @apply text-gray-400 absolute;
+  content: attr(data-placeholder);
+}
+
+/*TODO see if this can be hidden in some other way*/
+.ql-clipboard {
+  @apply hidden;
+}
+
+.ql-editor h1 {
+  @apply font-bold text-3xl mb-2;
+}
+
+.ql-editor h2 {
+  @apply font-bold text-xl mb-2;
+}
+
+.ql-editor h3 {
+  @apply font-bold text-base mb-1;
+}
+
+.ql-editor h4 {
+  @apply font-bold text-sm italic text-gray-500;
+}
+
+.ql-editor p {
+  @apply whitespace-pre-wrap;
+}
+
+.ql-editor ul {
+  @apply list-disc pl-6;
+}
+
+.ql-editor ol {
+  @apply list-decimal pl-6;
+}
+
+.ql-editor a {
+  @apply underline text-blue-800 hover:text-blue-600 cursor-pointer;
+}
+
+.ql-editor img {
+  @apply rounded-md my-2;
+}
+
+.ql-editor blockquote {
+  @apply italic text-gray-500 border-l-2 border-l-gray-600 pl-2 my-2;
+}
+
+.ql-editor code {
+  @apply px-2 py-1 rounded-sm text-xs bg-zinc-100;
+}
+
+.ql-editor pre.ql-syntax {
+  @apply px-2 py-2 rounded-sm text-xs bg-zinc-100;
+}

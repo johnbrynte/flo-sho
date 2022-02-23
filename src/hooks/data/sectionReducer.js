@@ -1,6 +1,6 @@
 let SECTION_ID = Date.now();
 
-export const addSection = (data, { pointId, section: inSection, index, text }) => {
+export const addSection = (data, { pointId, section: inSection, index, text, focus = false }) => {
   const section = inSection ? { ...inSection } : {
     id: SECTION_ID++,
     text: text ?? '',
@@ -28,6 +28,7 @@ export const addSection = (data, { pointId, section: inSection, index, text }) =
       [section.id]: section,
     },
     sections: [...data.sections, section.id],
+    focusedSection: focus ? section.id : data.focusedSection,
   }
 }
 
@@ -67,6 +68,9 @@ export const updateSection = (data, { id, text }) => {
 }
 
 export const moveSection = (data, { source, destination, draggableId }) => {
+  if (!destination) {
+    return data
+  }
   const targetId = parseInt(destination.droppableId)
   const targetIndex = destination.index
   const sectionId = parseInt(draggableId)

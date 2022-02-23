@@ -28,7 +28,7 @@ export const deletePoint = (data, { id }) => {
 
 export const updatePoint = (data, { id, name }) => {
   const point = data.pointsById[id]
-  setData({
+  return {
     ...data,
     pointsById: {
       ...data.pointsById,
@@ -37,5 +37,18 @@ export const updatePoint = (data, { id, name }) => {
         name: name ?? point.name,
       },
     },
-  })
+  }
+}
+
+export const movePoint = (data, { id, index }) => {
+  if (index < 0 || index >= data.points.length || data.points.indexOf(id) === index) {
+    return
+  }
+  const points = [ ...data.points ]
+  points.splice(points.indexOf(id), 1)
+  points.splice(index, 0, id)
+  return {
+    ...data,
+    points,
+  }
 }

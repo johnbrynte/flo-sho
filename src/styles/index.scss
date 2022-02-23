@@ -1,0 +1,49 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import "./quilljs.scss";
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0);
+}
+::-webkit-scrollbar-thumb {
+  background: #aaa;
+  border-radius: 5px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #bbb;
+}
+
+body {
+  @apply bg-gray-200;
+}
+
+input[type="text"] {
+  @apply px-2 h-8 leading-8 w-full;
+}
+
+input[type="text"].c-input {
+  @apply bg-white border border-zinc-300 rounded-md;
+}
+
+.c-btn {
+  @apply px-4 bg-white font-semibold hover:bg-zinc-100 hover:shadow-sm rounded-md text-sm leading-6;
+}
+
+.c-btn-w-icon {
+  @extend .c-btn;
+  @apply flex items-center justify-center;
+
+  svg {
+    @apply mr-2;
+  }
+}
+
+.c-icon-btn {
+  @apply flex items-center justify-center w-6 h-6 rounded-sm hover:bg-gray-200;
+}

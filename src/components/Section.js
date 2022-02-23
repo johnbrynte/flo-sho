@@ -8,7 +8,7 @@ import { FiTrash2, FiMoreHorizontal } from "react-icons/fi";
 import { Draggable } from 'react-beautiful-dnd'
 import { useData } from "../hooks/data/useData";
 
-export const SectionComponent = ({ section, index, lift }) => {
+export const SectionComponent = ({ section, index, newSection, movePointLeft, movePointRight, lift }) => {
   const { api: { deleteSection, updateSection, focusSection } } = useData()
   const quill = useRef(null)
   const textareaRef = useRef(null)
@@ -23,6 +23,10 @@ export const SectionComponent = ({ section, index, lift }) => {
   //   })
   // }, 500)
 
+  const blurEditor = () => {
+    quill.current?.root.blur();
+  }
+
   useEffect(() => {
     if (text === section.text) {
       return
@@ -32,12 +36,10 @@ export const SectionComponent = ({ section, index, lift }) => {
   }, [section.text])
 
   useEffect(() => {
-    if (!quill.current) {
-      return
-    }
     if (section.focus && !hasFocused) {
-      console.log("has focus")
-      quill.current.root.focus()
+      setTimeout(() => {
+        quill.current?.root.focus()
+      })
       setHasFocused(false)
     }
   }, [section.focus, hasFocused, quill.current])
@@ -103,6 +105,26 @@ export const SectionComponent = ({ section, index, lift }) => {
                 focusSection({ id: section.id })
               }
             },
+            movePointLeft: {
+              shortKey: true,
+              shiftKey: true,
+              key: 37,
+              handler: () => {
+                movePointLeft()
+                blurEditor()
+                focusSection({ id: section.id })
+              }
+            },
+            movePointRight: {
+              shortKey: true,
+              shiftKey: true,
+              key: 39,
+              handler: () => {
+                movePointRight()
+                blurEditor()
+                focusSection({ id: section.id })
+              }
+            },
           }
         }
       }
@@ -126,9 +148,16 @@ export const SectionComponent = ({ section, index, lift }) => {
 
     // to markdown
     var turndownService = new TurndownService({
-      headingStyle: 'atx'
+      headingStyle: 'atx',
+      codeBlockStyle: 'fenced',
     })
-    markdownRef.current = turndownService.turndown(quill.current.root.innerHTML)
+    // quill stores code blocks as
+    //   <pre class="ql-syntax" spellcheck="false">...</pre>
+    // but turndown expects
+    //   <pre><code>...</code></pre>
+    const html = quill.current.root.innerHTML
+      .replace(/<pre(?:[^>]*)>([^<>]+)<\/pre>/g, "<pre><code>$1</code></pre>")
+    markdownRef.current = turndownService.turndown(html)
 
     setText(markdownRef.current)
     updateSection({
@@ -162,16 +191,16 @@ export const SectionComponent = ({ section, index, lift }) => {
     <Draggable draggableId={`${section.id}`} index={index}>
       {(provided, snapshot) => (
         <div
-          className="flex flex-col px-2 pt-2 pb-1 rounded-md bg-white flex-shrink-0 mb-4 w-80"
+          className="flex flex-col pb-1 rounded-md bg-white flex-shrink-0 mb-2 w-80"
           ref={provided.innerRef}
           {...provided.draggableProps}
         >
-          <div className="text-xs text-gray-600">{section.id} (index {index})</div>
+          {/* <div className="text-xs text-gray-600">{section.id} (index {index})</div> */}
           <div
             className="flex flex-col items-stretch w-full min-h-20"
             ref={textareaRef}
           />
-          <div className="flex justify-end mt-1 opacity-30 hover:opacity-100">
+          <div className="flex justify-end px-2 pt-2 opacity-30 hover:opacity-100">
             <div
               className="flex-1 cursor-grab flex items-center justify-center h-6 rounded-sm hover:bg-gray-100"
               {...provided.dragHandleProps}

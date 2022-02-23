@@ -12,6 +12,7 @@ export const Timeline = () => {
   }, []);
 
   const sensorAPIRef = useRef(null)
+  const [newPointText, setNewPointText] = useState("")
   const scrollEl = useRef(null);
   const [isDragging, setIsDragging] = useState(false);
   const scroll = useRef(0);
@@ -64,6 +65,17 @@ export const Timeline = () => {
     scrollOrigin.current = scroll.current;
   }, [scrollEl]);
 
+  const onNewPointSubmit = (e) => {
+    if (e.nativeEvent.which !== 13 || !newPointText) {
+      return
+    }
+
+    addPoint({
+      name: newPointText
+    })
+    setNewPointText('')
+  }
+
   const points = data.points.map((id) => (
     {
       ...data.pointsById[id],
@@ -74,28 +86,33 @@ export const Timeline = () => {
     }
   ))
 
-  return (
-    <div className="bg-gray-100 p-1 rounded-md">
-      <DragDropContext onDragEnd={onDragEnd}
-        sensors={[
-          api => {
-            sensorAPIRef.current = api;
-          },
-        ]}>
-        <div
-          className="flex gap-4 px-4 py-10 overflow-x-scroll overscroll-auto touch-none"
-          ref={scrollEl}
-          onScroll={onScroll}
-        >
-          {points.map((point, index) => (
-            <PointComponent key={point.id}
-              point={point}
-              index={index}
-              lift={lift} />
-          ))}
+  return (<>
+    <DragDropContext onDragEnd={onDragEnd}
+      sensors={[
+        api => {
+          sensorAPIRef.current = api;
+        },
+      ]}>
+      <div
+        className="flex gap-4 px-4 py-10 overflow-x-scroll overscroll-auto touch-none"
+        ref={scrollEl}
+        onScroll={onScroll}>
+        {points.map((point, index) => (
+          <PointComponent key={point.id}
+            point={point}
+            index={index}
+            lift={lift} />
+        ))}
+        <div className="flex flex-col">
+          <div className="w-80">
+            <input className="c-input" type="text"
+              placeholder="Add a stack of cards..."
+              value={newPointText}
+              onChange={(e) => setNewPointText(e.target.value)}
+              onKeyDown={onNewPointSubmit} />
+          </div>
         </div>
-      </DragDropContext>
-      <button onClick={addPoint}>New point</button>
-    </div>
-  );
+      </div>
+    </DragDropContext>
+  </>);
 };

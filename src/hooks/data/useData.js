@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState } from "react"
-import { addPoint, deletePoint, updatePoint } from "./pointReducer"
+import { addPoint, deletePoint, updatePoint, movePoint } from "./pointReducer"
 import { addSection, deleteSection, updateSection, moveSection, focusSection } from "./sectionReducer"
 
 const STORAGE_KEY = "flo-sho-storage"
@@ -8,6 +8,7 @@ const api = {
   addPoint,
   deletePoint,
   updatePoint,
+  movePoint,
   addSection,
   deleteSection,
   updateSection,

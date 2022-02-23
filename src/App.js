@@ -1,6 +1,6 @@
 import { Timeline } from "./components/Timeline";
 import { DataProvider } from "./hooks/data/useData";
-import './styles/index.css';
+import './styles/index.scss';
 
 export default function App() {
   return (
