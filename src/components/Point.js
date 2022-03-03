@@ -1,8 +1,9 @@
 import { useCallback, useEffect, useRef, useState } from "react"
 import { SectionComponent } from "./Section";
-import { FiTrash2, FiPlus } from "react-icons/fi";
+import { FiMoreHorizontal, FiTrash2, FiPlus } from "react-icons/fi";
 import { Droppable } from 'react-beautiful-dnd'
 import { useData } from "../hooks/data/useData";
+import { Draggable } from "react-beautiful-dnd";
 
 export const PointComponent = ({ point, index, lift }) => {
   const { api: { addSection, deletePoint, updatePoint, movePoint } } = useData()
@@ -11,7 +12,7 @@ export const PointComponent = ({ point, index, lift }) => {
   const [newPointText, setNewPointText] = useState("")
 
   useEffect(() => {
-    setNewPointText(point.name)
+    setNewPointText(point.name || '')
   }, [point.name])
 
   const newSection = () => {
@@ -33,7 +34,7 @@ export const PointComponent = ({ point, index, lift }) => {
   }, [point, index])
 
   const cancelEditName = () => {
-    setNewPointText(point.name)
+    setNewPointText(point.name || '')
     setEditName(false)
     inputRef.current?.blur()
   }
@@ -56,47 +57,53 @@ export const PointComponent = ({ point, index, lift }) => {
   }
 
   return (
-    <div>
-      <div className="flex items-center justify-between mb-2">
-        <input type="text"
-          ref={inputRef}
-          className={editName ? 'c-input' : 'bg-transparent'}
-          placeholder="New point"
-          value={newPointText}
-          onChange={(e) => setNewPointText(e.target.value)}
-          onKeyDown={onNewPointSubmit}
-          onFocus={() => setEditName(true)}
-          onBlur={cancelEditName} />
-        
-        <div className="flex justify-end flex-1 opacity-30 hover:opacity-100">
-          <button className="c-icon-btn"
-            onClick={() => deletePoint({id: point.id})}>
-            <FiTrash2 />
-          </button>
-        </div>
-      </div>
-      <Droppable droppableId={`${point.id}`}>
-        {(provided, snapshot) => (
-          <div className="flex flex-col w-80"
-            ref={provided.innerRef}
-            {...provided.droppableProps}>
-            {point.sections.map((section, index) => (
-              <SectionComponent key={section.id}
-                index={index}
-                section={section}
-                newSection={newSection}
-                movePointLeft={movePointLeft}
-                movePointRight={movePointRight}
-                lift={lift} />
-            ))}
-            {provided.placeholder}
-            <button className={`c-btn-w-icon ${point.sections.length ? 'mt-2' : ''}`} onClick={newSection}>
-              <FiPlus />
-              Add card
-            </button>
+    <Draggable draggableId={`point-${point.id}`} index={index} type="point">
+      {(provided, snapshot) => (
+        <div className="bg-gray-200 rounded-md p-1 mr-2"
+          ref={provided.innerRef}
+          {...provided.draggableProps}
+        >
+          <div className="flex items-center justify-between mb-2">
+            <input type="text"
+              ref={inputRef}
+              className={editName ? 'c-input' : 'bg-transparent'}
+              placeholder="New point"
+              value={newPointText}
+              onChange={(e) => setNewPointText(e.target.value)}
+              onKeyDown={onNewPointSubmit}
+              onFocus={() => setEditName(true)}
+              onBlur={cancelEditName} />
+            <div className="flex justify-end flex-1 opacity-30 hover:opacity-100">
+              <div
+                className="flex items-center justify-center w-6 h-6 rounded-sm hover:bg-gray-200 cursor-grab"
+                {...provided.dragHandleProps}
+              >
+                <FiMoreHorizontal />
+              </div>
+              <button className="flex items-center justify-center w-6 h-6 rounded-sm hover:bg-gray-200"
+                onClick={() => deletePoint(point.id)}>
+                <FiTrash2 />
+              </button>
+            </div>
           </div>
-        )}
-      </Droppable>
-    </div>
+          <Droppable droppableId={`point-${point.id}`} type="section">
+            {(provided, snapshot) => (
+              <div className="flex flex-col w-80"
+                ref={provided.innerRef}>
+                {point.sections.map((section, index) => (
+                  <SectionComponent key={section.id}
+                    index={index}
+                    section={section}
+                    lift={lift} />
+                ))}
+                {provided.placeholder}
+                <button onClick={() => addSection({ pointId: point.id })}>New section</button>
+              </div>
+            )}
+          </Droppable>
+          {provided.placeholder}
+        </div>
+      )}
+    </Draggable>
   );
 };

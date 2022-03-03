@@ -3,12 +3,23 @@ import { useDrag } from "@use-gesture/react";
 import { PointComponent } from "./Point";
 import { DragDropContext } from 'react-beautiful-dnd'
 import { useData } from "../hooks/data/useData";
+import { Droppable } from "react-beautiful-dnd";
 
 export const Timeline = () => {
-  const { data, api: { addPoint, moveSection } } = useData()
+  const { data, api: { addPoint, movePoint, moveSection } } = useData()
 
   const onDragEnd = useCallback((result, provided) => {
-    moveSection(result)
+    switch (result.type) {
+      case "point":
+        movePoint(result)
+        break
+      case "section":
+        moveSection(result)
+        break
+      default:
+        console.error("Invalid dnd type")
+        break
+    }
   }, []);
 
   const sensorAPIRef = useRef(null)
@@ -86,33 +97,42 @@ export const Timeline = () => {
     }
   ))
 
-  return (<>
+  return (
     <DragDropContext onDragEnd={onDragEnd}
       sensors={[
         api => {
           sensorAPIRef.current = api;
         },
       ]}>
-      <div
-        className="flex gap-4 px-4 py-10 overflow-x-scroll overscroll-auto touch-none"
-        ref={scrollEl}
-        onScroll={onScroll}>
-        {points.map((point, index) => (
-          <PointComponent key={point.id}
-            point={point}
-            index={index}
-            lift={lift} />
-        ))}
-        <div className="flex flex-col">
-          <div className="w-80">
-            <input className="c-input" type="text"
-              placeholder="Add a stack of cards..."
-              value={newPointText}
-              onChange={(e) => setNewPointText(e.target.value)}
-              onKeyDown={onNewPointSubmit} />
+      <Droppable droppableId={`timeline`} type="point" direction="horizontal">
+        {(provided, snapshot) => (
+          <div
+            ref={provided.innerRef}>
+            <div
+              className="flex px-4 py-10 overflow-x-scroll overscroll-auto touch-none"
+              ref={scrollEl}
+              onScroll={onScroll}
+            >
+              {points.map((point, index) => (
+                <PointComponent key={point.id}
+                  point={point}
+                  index={index}
+                  lift={lift} />
+              ))}
+              {provided.placeholder}
+              <div className="flex flex-col">
+                <div className="w-80">
+                  <input className="c-input" type="text"
+                    placeholder="Add a stack of cards..."
+                    value={newPointText}
+                    onChange={(e) => setNewPointText(e.target.value)}
+                    onKeyDown={onNewPointSubmit} />
+                </div>
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
+        )}
+      </Droppable>
     </DragDropContext>
-  </>);
+  );
 };

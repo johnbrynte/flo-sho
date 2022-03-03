@@ -1,18 +1,27 @@
 let POINT_ID = Date.now();
 
-export const addPoint = (data, { name }) => {
-  const point = {
+export const addPoint = (data, { point: inPoint, index, name }) => {
+  const point = inPoint ? { ...inPoint } : {
     id: POINT_ID++,
     name,
     sections: [],
   }
+
+  // TODO: handle duplicates
+  let points = [...data.points]
+  if (typeof index === 'number') {
+    points.splice(index, 0, point.id)
+  } else {
+    points.push(point.id)
+  }
+
   return {
     ...data,
     pointsById: {
       ...data.pointsById,
       [point.id]: point,
     },
-    points: [...data.points, point.id],
+    points,
   }
 }
 
@@ -40,15 +49,11 @@ export const updatePoint = (data, { id, name }) => {
   }
 }
 
-export const movePoint = (data, { id, index }) => {
-  if (index < 0 || index >= data.points.length || data.points.indexOf(id) === index) {
-    return
-  }
-  const points = [ ...data.points ]
-  points.splice(points.indexOf(id), 1)
-  points.splice(index, 0, id)
-  return {
-    ...data,
-    points,
-  }
+export const movePoint = (data, { source, destination, draggableId }) => {
+  const targetIndex = destination.index
+  const pointId = parseInt(draggableId.match(/point-([0-9]+)/)[1])
+
+  const point = data.pointsById[pointId]
+
+  return addPoint(deletePoint(data, { id: point.id }), { point, index: targetIndex })
 }

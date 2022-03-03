@@ -188,7 +188,7 @@ export const SectionComponent = ({ section, index, newSection, movePointLeft, mo
   }
 
   return (
-    <Draggable draggableId={`${section.id}`} index={index}>
+    <Draggable draggableId={`section-${section.id}`} index={index} type="section">
       {(provided, snapshot) => (
         <div
           className="flex flex-col pb-1 rounded-md bg-white flex-shrink-0 mb-2 w-80"
@@ -214,6 +214,7 @@ export const SectionComponent = ({ section, index, newSection, movePointLeft, mo
               </button>
             </div>
           </div>
+          {provided.placeholder}
         </div>
       )}
     </Draggable>

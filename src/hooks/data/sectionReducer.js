@@ -71,9 +71,9 @@ export const moveSection = (data, { source, destination, draggableId }) => {
   if (!destination) {
     return data
   }
-  const targetId = parseInt(destination.droppableId)
+  const targetId = parseInt(destination.droppableId.match(/point-([0-9]+)/)[1])
   const targetIndex = destination.index
-  const sectionId = parseInt(draggableId)
+  const sectionId = parseInt(draggableId.match(/section-([0-9]+)/)[1])
 
   const section = data.sectionsById[sectionId]
 
