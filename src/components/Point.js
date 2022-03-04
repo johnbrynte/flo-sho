@@ -4,12 +4,18 @@ import { FiMoreHorizontal, FiTrash2, FiPlus } from "react-icons/fi";
 import { Droppable } from 'react-beautiful-dnd'
 import { useData } from "../hooks/data/useData";
 import { Draggable } from "react-beautiful-dnd";
+import { Modal } from "./Modal";
 
 export const PointComponent = ({ point, index, lift }) => {
   const { api: { addSection, deletePoint, updatePoint, movePoint } } = useData()
   const inputRef = useRef(null)
   const [editName, setEditName] = useState(false)
   const [newPointText, setNewPointText] = useState("")
+  const [showDeleteModal, setShowDeleteModal] = useState(false)
+
+  const closeDeleteModal = () => {
+    setShowDeleteModal(false)
+  }
 
   useEffect(() => {
     setNewPointText(point.name || '')
@@ -56,7 +62,7 @@ export const PointComponent = ({ point, index, lift }) => {
     inputRef.current?.blur()
   }
 
-  return (
+  return (<>
     <Draggable draggableId={`point-${point.id}`} index={index} type="point">
       {(provided, snapshot) => (
         <div className="bg-gray-200 rounded-md p-1 mr-2"
@@ -81,7 +87,7 @@ export const PointComponent = ({ point, index, lift }) => {
                 <FiMoreHorizontal />
               </div>
               <button className="flex items-center justify-center w-6 h-6 rounded-sm hover:bg-white"
-                onClick={() => deletePoint(point.id)}>
+                onClick={() => setShowDeleteModal(true)}>
                 <FiTrash2 />
               </button>
             </div>
@@ -109,5 +115,22 @@ export const PointComponent = ({ point, index, lift }) => {
         </div>
       )}
     </Draggable>
-  );
+    <Modal open={showDeleteModal} title="Delete stack?" onClose={closeDeleteModal}>
+      <div className="mt-4 flex">
+        <button
+          className="c-btn-secondary mr-2"
+          onClick={closeDeleteModal}
+        >
+          No
+        </button>
+        <button className="c-btn-primary"
+          onClick={() => {
+            closeDeleteModal()
+            deletePoint({ id: point.id })
+          }}>
+          Yes
+        </button>
+      </div>
+    </Modal>
+  </>);
 };

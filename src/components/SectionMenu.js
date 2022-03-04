@@ -1,18 +1,24 @@
 import { Menu, Transition } from '@headlessui/react'
-import { Fragment } from 'react'
+import { Fragment, useState } from 'react'
 import { FiMenu, FiTrash2 } from 'react-icons/fi'
 import { useData } from '../hooks/data/useData'
 import { ColorPicker } from './ColorPicker'
+import { Modal } from './Modal'
 
 export const SectionMenu = ({ section }) => {
   const { api: { deleteSection } } = useData()
+  const [showDeleteModal, setShowDeleteModal] = useState(false)
+
+  const closeDeleteModal = () => {
+    setShowDeleteModal(false)
+  }
 
   const items = [
     {
       icon: (<FiTrash2 />),
       text: "Delete card",
       action: () => {
-        deleteSection({ id: section.id })
+        setShowDeleteModal(true)
       },
     },
     {
@@ -22,7 +28,7 @@ export const SectionMenu = ({ section }) => {
     },
   ]
 
-  return (
+  return (<>
     <Menu as="div" className="relative inline-block text-left">
       <div>
         <Menu.Button className="c-card-btn flex items-center justify-center w-6 h-6 rounded-sm">
@@ -62,5 +68,22 @@ export const SectionMenu = ({ section }) => {
         </Menu.Items>
       </Transition>
     </Menu>
-  )
+    <Modal open={showDeleteModal} title="Delete card?" onClose={closeDeleteModal}>
+      <div className="mt-4 flex">
+        <button
+          className="c-btn-secondary mr-2"
+          onClick={closeDeleteModal}
+        >
+          No
+        </button>
+        <button className="c-btn-primary"
+          onClick={() => {
+            closeDeleteModal()
+            deleteSection({ id: section.id })
+          }}>
+          Yes
+        </button>
+      </div>
+    </Modal>
+  </>)
 }

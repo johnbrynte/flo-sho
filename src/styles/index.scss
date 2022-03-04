@@ -35,6 +35,16 @@ input[type="text"].c-input {
   @apply px-4 bg-white font-semibold hover:bg-zinc-100 hover:shadow-sm rounded-md text-sm leading-6;
 }
 
+.c-btn-secondary {
+  @extend .c-btn;
+  @apply border border-zinc-200;
+}
+
+.c-btn-primary {
+  @extend .c-btn;
+  @apply bg-blue-200 hover:bg-blue-100;
+}
+
 .c-btn-w-icon {
   @extend .c-btn;
   @apply flex pl-2 py-1 items-center justify-start;
