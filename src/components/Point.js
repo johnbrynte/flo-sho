@@ -75,12 +75,12 @@ export const PointComponent = ({ point, index, lift }) => {
               onBlur={cancelEditName} />
             <div className="flex justify-end flex-1 opacity-30 hover:opacity-100">
               <div
-                className="flex items-center justify-center w-6 h-6 rounded-sm hover:bg-gray-200 cursor-grab"
+                className="flex items-center justify-center w-6 h-6 rounded-sm hover:bg-white cursor-grab"
                 {...provided.dragHandleProps}
               >
                 <FiMoreHorizontal />
               </div>
-              <button className="flex items-center justify-center w-6 h-6 rounded-sm hover:bg-gray-200"
+              <button className="flex items-center justify-center w-6 h-6 rounded-sm hover:bg-white"
                 onClick={() => deletePoint(point.id)}>
                 <FiTrash2 />
               </button>
@@ -97,7 +97,11 @@ export const PointComponent = ({ point, index, lift }) => {
                     lift={lift} />
                 ))}
                 {provided.placeholder}
-                <button onClick={() => addSection({ pointId: point.id })}>New section</button>
+                <button className={`c-btn-w-icon ${point.sections.length ? 'mt-2' : ''}`}
+                  onClick={newSection}>
+                  <FiPlus />
+                  Add card
+                </button>
               </div>
             )}
           </Droppable>

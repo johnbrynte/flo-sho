@@ -37,7 +37,7 @@ input[type="text"].c-input {
 
 .c-btn-w-icon {
   @extend .c-btn;
-  @apply flex items-center justify-center;
+  @apply flex pl-2 py-1 items-center justify-start;
 
   svg {
     @apply mr-2;
@@ -46,4 +46,78 @@ input[type="text"].c-input {
 
 .c-icon-btn {
   @apply flex items-center justify-center w-6 h-6 rounded-sm hover:bg-gray-200;
+}
+
+.c-card-btn {
+  @apply hover:bg-white/60;
+}
+
+/* card color */
+
+.card-white {
+  @apply bg-white;
+
+  .c-card-btn {
+    @apply hover:bg-gray-100;
+  }
+}
+
+.card-red {
+  @apply bg-red-200;
+
+  .ql-editor {
+    @apply focus:ring-red-600/40;
+  }
+
+  .ql-blank::before {
+    @apply text-red-800/60;
+  }
+}
+
+.card-blue {
+  @apply bg-blue-200;
+
+  .ql-editor {
+    @apply focus:ring-blue-600/40;
+  }
+
+  .ql-blank::before {
+    @apply text-blue-800/60;
+  }
+}
+
+.card-yellow {
+  @apply bg-amber-100;
+
+  .ql-editor {
+    @apply focus:ring-amber-600/40;
+  }
+
+  .ql-blank::before {
+    @apply text-amber-800/60;
+  }
+}
+
+.card-green {
+  @apply bg-emerald-200;
+
+  .ql-editor {
+    @apply focus:ring-emerald-600/40;
+  }
+
+  .ql-blank::before {
+    @apply text-emerald-800/60;
+  }
+}
+
+.card-purple {
+  @apply bg-violet-200;
+
+  .ql-editor {
+    @apply focus:ring-violet-600/40;
+  }
+
+  .ql-blank::before {
+    @apply text-violet-800/60;
+  }
 }

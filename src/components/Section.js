@@ -4,9 +4,11 @@ import { marked } from "marked"
 import Quill from 'quill'
 import QuillMarkdown from 'quilljs-markdown'
 import useDebounce from "../hooks/useDebounce";
-import { FiTrash2, FiMoreHorizontal } from "react-icons/fi";
+import { FiMoreHorizontal } from "react-icons/fi";
 import { Draggable } from 'react-beautiful-dnd'
 import { useData } from "../hooks/data/useData";
+import { SectionMenu } from "./SectionMenu";
+import { colors } from "./ColorPicker";
 
 export const SectionComponent = ({ section, index, newSection, movePointLeft, movePointRight, lift }) => {
   const { api: { deleteSection, updateSection, focusSection } } = useData()
@@ -15,6 +17,8 @@ export const SectionComponent = ({ section, index, newSection, movePointLeft, mo
   const markdownRef = useRef('')
   const [text, setText] = useState(section.text)
   const [hasFocused, setHasFocused] = useState(false)
+
+  const sectionColor = colors.find((c) => c.name === section.color)
 
   // const updateDebounce = useDebounce((markdown) => {
   //   onUpdate({
@@ -168,7 +172,6 @@ export const SectionComponent = ({ section, index, newSection, movePointLeft, mo
 
   const onSelectionChange = (range, oldRange) => {
     if (range === null && oldRange !== null) {
-      console.log('blur')
       focusSection(null)
     } else if (range !== null && oldRange === null) {
       // focus
@@ -191,7 +194,7 @@ export const SectionComponent = ({ section, index, newSection, movePointLeft, mo
     <Draggable draggableId={`section-${section.id}`} index={index} type="section">
       {(provided, snapshot) => (
         <div
-          className="flex flex-col pb-1 rounded-md bg-white flex-shrink-0 mb-2 w-80"
+          className={`flex flex-col pb-1 rounded-md flex-shrink-0 mb-2 w-80 card-${sectionColor?.name ?? 'white'}`}
           ref={provided.innerRef}
           {...provided.draggableProps}
         >
@@ -200,18 +203,15 @@ export const SectionComponent = ({ section, index, newSection, movePointLeft, mo
             className="flex flex-col items-stretch w-full min-h-20"
             ref={textareaRef}
           />
-          <div className="flex justify-end px-2 pt-2 opacity-30 hover:opacity-100">
+          <div className="flex justify-end px-2 pt-2">
             <div
-              className="flex-1 cursor-grab flex items-center justify-center h-6 rounded-sm hover:bg-gray-100"
+              className="c-card-btn flex-1 cursor-grab flex items-center justify-center h-6 rounded-sm"
               {...provided.dragHandleProps}
             >
               <FiMoreHorizontal />
             </div>
-            <div className="">
-              <button className="flex items-center justify-center w-6 h-6 rounded-sm hover:bg-gray-100"
-                onClick={() => deleteSection({ id: section.id })}>
-                <FiTrash2 />
-              </button>
+            <div>
+              <SectionMenu section={section} />
             </div>
           </div>
           {provided.placeholder}

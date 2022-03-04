@@ -53,7 +53,7 @@ export const deleteSection = (data, { id }) => {
   }
 }
 
-export const updateSection = (data, { id, text }) => {
+export const updateSection = (data, { id, text, color }) => {
   const section = data.sectionsById[id]
   return {
     ...data,
@@ -62,6 +62,7 @@ export const updateSection = (data, { id, text }) => {
       [id]: {
         ...section,
         text: text ?? section.text,
+        color: color ?? section.color,
       },
     },
   }
