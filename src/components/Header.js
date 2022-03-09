@@ -25,48 +25,50 @@ export const Header = () => {
     event.preventDefault()
   }
 
-  if (!user) {
-    return (<>
-      <div className="flex">
-        <div className="relative">
-          <Popover button="Register">
-            <form className="p-4 bg-white" onSubmit={register}>
-              <label htmlFor="login-name">Name</label>
-              <input className="c-input" id="login-name" type="text" name="name"
-                value={name} onChange={(e) => setName(e.target.value)} />
-              <label htmlFor="login-email">Email</label>
-              <input className="c-input" id="login-email" type="email" name="email"
-                value={email} onChange={(e) => setEmail(e.target.value)} />
-              <label htmlFor="login-password">Password</label>
-              <input className="c-input mb-4" id="login-password" type="password" name="password"
-                value={password} onChange={(e) => setPassword(e.target.value)} />
-              {registerError && <p className="text-red-800">{registerError}</p>}
-              <button type="submit" className="c-btn c-btn-primary">Register</button>
-            </form>
-          </Popover>
+  return (
+    <div className="flex justify-end px-5 py-1">
+      {user ? (
+        <div className="flex">
+          Logged in as {user.name} ({user.email}) <button className="c-btn ml-2" onClick={logout}>Log out</button>
         </div>
+      ) : (
+        <div className="flex">
+          <div className="relative">
+            <Popover button="Register">
+              <form className="p-4 bg-white" onSubmit={register}>
+                <label htmlFor="login-name">Name</label>
+                <input className="c-input" id="login-name" type="text" name="name"
+                  value={name} onChange={(e) => setName(e.target.value)} />
+                <label htmlFor="login-email">Email</label>
+                <input className="c-input" id="login-email" type="email" name="email"
+                  value={email} onChange={(e) => setEmail(e.target.value)} />
+                <label htmlFor="login-password">Password</label>
+                <input className="c-input mb-4" id="login-password" type="password" name="password"
+                  value={password} onChange={(e) => setPassword(e.target.value)} />
+                {registerError && <p className="text-red-800">{registerError}</p>}
+                <button type="submit" className="c-btn c-btn-primary">Register</button>
+              </form>
+            </Popover>
+          </div>
 
-        <span className="mx-2">or</span>
+          <span className="mx-2">or</span>
 
-        <div className="relative">
-          <Popover button="Log in">
-            <form className="p-4 bg-white" onSubmit={login}>
-              <label htmlFor="login-email">Email</label>
-              <input className="c-input" id="login-email" type="email" name="email"
-                value={email} onChange={(e) => setEmail(e.target.value)} />
-              <label htmlFor="login-password">Password</label>
-              <input className="c-input mb-4" id="login-password" type="password" name="password"
-                value={password} onChange={(e) => setPassword(e.target.value)} />
-              {loginError && <p className="text-red-800">{loginError}</p>}
-              <button type="submit" className="c-btn c-btn-primary">Log in</button>
-            </form>
-          </Popover>
+          <div className="relative">
+            <Popover button="Log in">
+              <form className="p-4 bg-white" onSubmit={login}>
+                <label htmlFor="login-email">Email</label>
+                <input className="c-input" id="login-email" type="email" name="email"
+                  value={email} onChange={(e) => setEmail(e.target.value)} />
+                <label htmlFor="login-password">Password</label>
+                <input className="c-input mb-4" id="login-password" type="password" name="password"
+                  value={password} onChange={(e) => setPassword(e.target.value)} />
+                {loginError && <p className="text-red-800">{loginError}</p>}
+                <button type="submit" className="c-btn c-btn-primary">Log in</button>
+              </form>
+            </Popover>
+          </div>
         </div>
-      </div>
-    </>)
-  }
-
-  return (<>
-    <span>Logged in as {user.name} ({user.email}) <button className="c-btn" onClick={logout}>Log out</button></span>
-  </>)
+      )}
+    </div>
+  )
 }
