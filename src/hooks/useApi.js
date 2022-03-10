@@ -1,4 +1,4 @@
-import { useCallback, useContext, useEffect, useState } from "react"
+import { useCallback, useContext, useState } from "react"
 import { UserContext } from "../util/UserContext"
 
 export const useApi = (method, path, customToken) => {
@@ -7,12 +7,12 @@ export const useApi = (method, path, customToken) => {
   const [error, setError] = useState(null)
   const [loading, setLoading] = useState(false)
 
-  const trigger = useCallback(async (params) => {
+  const trigger = useCallback(async (options) => {
     setLoading(true)
     setError(null)
 
     try {
-      const data = await fetch(`https://www.johnbrynte.se/projects/flosho/api/${path}`, {
+      const data = await fetch(`https://www.johnbrynte.se/projects/flosho/api/${options?.path ?? path}`, {
         method,
         mode: 'cors',
         headers: {
@@ -22,8 +22,8 @@ export const useApi = (method, path, customToken) => {
             'Authorization': `Basic ${customToken ?? token}`,
           } : {}),
         },
-        ...(params && method.toLowerCase() === 'post' ? {
-          body: JSON.stringify(params)
+        ...(options?.params && method.toLowerCase() === 'post' ? {
+          body: JSON.stringify(options?.params)
         } : {}),
       })
       const json = await data.json()

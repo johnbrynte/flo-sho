@@ -10,17 +10,21 @@ export const Header = () => {
 
   const register = (event) => {
     registerTrigger({
-      name,
-      email,
-      password,
+      params: {
+        name,
+        email,
+        password,
+      },
     })
     event.preventDefault()
   }
 
   const login = (event) => {
     loginTrigger({
-      email,
-      password,
+      params: {
+        email,
+        password,
+      },
     })
     event.preventDefault()
   }
@@ -33,8 +37,9 @@ export const Header = () => {
         </div>
       ) : (
         <div className="flex">
+          {/* TODO: use InputDialog */}
           <div className="relative">
-            <Popover button="Register">
+            <Popover button="Register" position="right">
               <form className="p-4 bg-white" onSubmit={register}>
                 <label htmlFor="login-name">Name</label>
                 <input className="c-input" id="login-name" type="text" name="name"
@@ -53,8 +58,9 @@ export const Header = () => {
 
           <span className="mx-2">or</span>
 
+          {/* TODO: use InputDialog */}
           <div className="relative">
-            <Popover button="Log in">
+            <Popover button="Log in" position="right">
               <form className="p-4 bg-white" onSubmit={login}>
                 <label htmlFor="login-email">Email</label>
                 <input className="c-input" id="login-email" type="email" name="email"

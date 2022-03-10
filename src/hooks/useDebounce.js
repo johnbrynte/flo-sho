@@ -1,6 +1,6 @@
 import { useCallback, useRef } from 'react';
 
-export default function useDebounce(callback, delay) {
+export default function useDebounce(callback, delay, dependencies) {
   const handler = useRef(null)
 
   const debouncedCallback = useCallback((...args) => {
@@ -16,7 +16,7 @@ export default function useDebounce(callback, delay) {
     return () => {
       clearTimeout(handler.current);
     };
-  }, [delay]);
+  }, [delay, ...(dependencies ?? [])]);
 
   return debouncedCallback;
 }
