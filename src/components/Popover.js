@@ -4,7 +4,7 @@ import { Fragment } from "react"
 export const Popover = ({ button, position, children }) => {
   return (
     <HeadlessPopover className="relative">
-      {({ open }) => (
+      {({ open, close }) => (
         <>
           <HeadlessPopover.Button
             className="c-btn"
@@ -22,7 +22,7 @@ export const Popover = ({ button, position, children }) => {
           >
             <HeadlessPopover.Panel className={`absolute z-10 w-screen max-w-sm px-4 top-0 sm:px-0 lg:max-w-3xl ${position === 'right' ? 'right-0' : 'left-0'}`}>
               <div className="overflow-hidden rounded-lg shadow-lg ring-1 ring-black ring-opacity-5">
-                {children}
+                {children({close})}
               </div>
             </HeadlessPopover.Panel>
           </Transition>

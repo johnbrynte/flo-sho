@@ -137,6 +137,9 @@ export const SectionComponent = ({ section, index, newSection, movePointLeft, mo
     editor.on('text-change', onTextChange)
     editor.on('selection-change', onSelectionChange)
     editor.root.setAttribute("spellcheck", "false")
+    editor.root.addEventListener("keydown", (e) => {
+      e.stopPropagation()
+    })
     quill.current = editor
 
     const markdownOptions = {}

@@ -106,10 +106,10 @@ export const Timeline = () => {
       ]}>
       <Droppable droppableId={`timeline`} type="point" direction="horizontal">
         {(provided, snapshot) => (
-          <div
+          <div className="flex-1"
             ref={provided.innerRef}>
             <div
-              className="flex px-4 py-10 overflow-x-scroll overscroll-auto touch-none"
+              className="flex px-4 pt-2 h-full pb-10 overflow-x-scroll overscroll-auto touch-none"
               ref={scrollEl}
               onScroll={onScroll}
             >

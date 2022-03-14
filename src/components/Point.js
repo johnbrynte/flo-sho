@@ -65,7 +65,7 @@ export const PointComponent = ({ point, index, lift }) => {
   return (<>
     <Draggable draggableId={`point-${point.id}`} index={index} type="point">
       {(provided, snapshot) => (
-        <div className="bg-gray-200 rounded-md p-1 mr-2"
+        <div className="bg-slate-100 rounded-md p-1 mr-2"
           ref={provided.innerRef}
           {...provided.draggableProps}
         >

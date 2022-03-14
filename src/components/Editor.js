@@ -1,48 +1,77 @@
 import { Timeline } from "./Timeline";
 import { DataProvider } from "../hooks/data/useData";
-import { useContext, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useApi } from "../hooks/useApi";
-import { InputDialog } from "./InputDialog";
-import { UserContext } from "../util/UserContext";
+import { useBoard } from "../hooks/useBoard";
+import { Modal } from "./Modal";
+import { FiTrash2 } from "react-icons/fi";
 
 export const Editor = () => {
-  const { user } = useContext(UserContext)
-  const { result: board, trigger: fetchBoard } = useApi('get')
-  const { result: boards, trigger: fetchBoards } = useApi('get', 'boards')
-  const { error: createError, trigger: createBoardApi } = useApi('post', 'boards/new')
+  const [selectedBoard, dispatchBoard] = useBoard()
+  const { result: board, loading, trigger: fetchBoard } = useApi('get')
+  const { trigger: deleteBoardApi } = useApi('post')
+  const [showDeleteModal, setShowDeleteModal] = useState(false)
+
+  const closeDeleteModal = () => {
+    setShowDeleteModal(false)
+  }
+
+  const deleteBoard = async () => {
+    console.log("delete board", board)
+    await deleteBoardApi({ path: `boards/${board.id}/delete` })
+    dispatchBoard({
+      type: "SET_BOARD",
+      payload: {
+        board: null
+      }
+    })
+  }
 
   useEffect(() => {
-    user && fetchBoards()
-  }, [user])
+    selectedBoard && fetchBoard({ path: `boards/${selectedBoard.id}` })
+  }, [selectedBoard])
 
-  const createBoard = async (data) => {
-    await createBoardApi(data)
-    fetchBoards()
+  if (loading) {
+    return null
   }
 
   return (<>
-    <InputDialog button="New board" submitButton="Create" submit={createBoard} error={createError}
-      input={[
-        {
-          key: "name",
-          label: "Name",
-        }
-      ]}
-    />
-    {!board && boards?.map((b) => (
-      <button className="c-btn" key={b.id} onClick={() => fetchBoard({ path: `boards/${b.id}` })}>
-        {b.name} ({b.id})
-      </button>
-    ))}
-    {board ? (
+    {selectedBoard && board ? (
       <DataProvider board={board}>
-        Board: {board.name}
+        <div className="flex items-center px-5 py-2 animate-appear">
+          <div className="mr-2 text-lg font-semibold">
+            {board.name}
+          </div>
+          <button className="c-icon-btn opacity-40 hover:opacity-100" onClick={() => setShowDeleteModal(true)}>
+            <FiTrash2 />
+          </button>
+        </div>
         <Timeline />
+        <Modal open={showDeleteModal} title="Delete board?" onClose={closeDeleteModal}>
+          <div className="mt-4 flex">
+            <button
+              className="c-btn-secondary mr-2"
+              onClick={closeDeleteModal}
+            >
+              No
+            </button>
+            <button className="c-btn-primary"
+              onClick={() => {
+                closeDeleteModal()
+                deleteBoard()
+              }}>
+              Yes
+            </button>
+          </div>
+        </Modal>
       </DataProvider>
     ) : (
-      <DataProvider>
-        <Timeline />
-      </DataProvider>
+      <div className="px-5 py-4">
+        Open a board with '/' or create a new one.
+      </div>
+      // <DataProvider>
+      //   <Timeline />
+      // </DataProvider>
     )}
   </>)
 }

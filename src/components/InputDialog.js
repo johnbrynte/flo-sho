@@ -10,10 +10,17 @@ export const InputDialog = ({ input, error, position, button, submitButton, subm
   return (
     <div className="relative">
       <Popover position={position} button={button}>
+        {({close}) => (
         <form className="p-4 bg-white" onSubmit={(e) => {
           submit({
             params: data,
           })
+          const clearedData = {}
+          input.forEach(({key}) => {
+            clearedData[key] = ''
+          })
+          setData(clearedData)
+          close()
           e.preventDefault()
         }}>
           {input.map((inp, i) => (
@@ -32,6 +39,7 @@ export const InputDialog = ({ input, error, position, button, submitButton, subm
           {error && <p className="text-red-800">{error}</p>}
           <button type="submit" className="c-btn c-btn-primary">{submitButton}</button>
         </form>
+        )}
       </Popover>
     </div>
   )

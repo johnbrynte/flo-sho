@@ -32,6 +32,7 @@ export const useApi = (method, path, customToken) => {
         setResult(null)
       } else {
         setResult(json)
+        return json
       }
     } catch (e) {
       setError(e)
