@@ -73,7 +73,7 @@ export const Header = () => {
               <button className="c-btn" onClick={() => setSearchOpen(true)}>
                 <span className="flex items-center">
                   <FiSearch />
-                  <span className="ml-2">Search</span>
+                  <span className="ml-2">Open board</span>
                 </span>
               </button>
             )}
