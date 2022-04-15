@@ -87,7 +87,7 @@ export const Header = () => {
           <div className="flex justify-end animate-appear">
           {/* TODO: use InputDialog */}
           <div className="relative">
-            <Popover button="Register" position="right">
+            <Popover button="Register" position="left">
               {() => (
               <form className="p-4 bg-white" onSubmit={register}>
                 <label htmlFor="login-name">Name</label>
@@ -110,7 +110,7 @@ export const Header = () => {
 
           {/* TODO: use InputDialog */}
           <div className="relative">
-            <Popover button="Log in" position="right">
+            <Popover button="Log in" position="left">
               {() => (
               <form className="p-4 bg-white" onSubmit={login}>
                 <label htmlFor="login-email">Email</label>

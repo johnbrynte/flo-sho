@@ -31,6 +31,12 @@ export const Editor = () => {
     selectedBoard && fetchBoard({ path: `boards/${selectedBoard.id}` })
   }, [selectedBoard])
 
+  useEffect(() => {
+    if (board) {
+      document.title = board.name
+    }
+  }, [board])
+
   if (loading) {
     return null
   }

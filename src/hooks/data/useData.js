@@ -21,6 +21,7 @@ const api = {
 export const DataContext = createContext({
   data: {},
   api,
+  saveError: null,
 })
 
 const getDefaultData = (data) => ({
