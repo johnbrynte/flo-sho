@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState } from "react"
+import { createContext, useCallback, useContext, useEffect, useState } from "react"
 import { addPoint, deletePoint, updatePoint, movePoint } from "./pointReducer"
 import { addSection, deleteSection, updateSection, moveSection, focusSection } from "./sectionReducer"
 import { useApi } from "../useApi"
@@ -48,16 +48,28 @@ export const DataProvider = ({ board, children }) => {
     return getDefaultData(parsedData)
   });
 
-  const { error: saveError, trigger: triggerSave } = useApi('post')
+  const { result: saveResult, error: saveError, trigger: triggerSave } = useApi('post')
 
-  const debouncedSave = useDebounce(() => {
+  const save = useCallback(() => {
     triggerSave({
       params: {
-        data: JSON.stringify(data),
+        data: JSON.stringify(Object.fromEntries(Object.entries(data).filter(([key]) => !key.startsWith('_')))),
       },
       path: `boards/${board?.id}/update`
     })
+  }, [board, data])
+
+  const debouncedSave = useDebounce(() => {
+    save()
   }, 1000, [board, data])
+
+  useEffect(() => {
+    if (saveResult && saveResult.data && saveResult.data.added) {
+      saveResult.data.added.forEach((s) => {
+        wrappedApi.updateSection(s)
+      })
+    }
+  }, [saveResult])
 
   useEffect(() => {
     if (board) {
@@ -67,7 +79,11 @@ export const DataProvider = ({ board, children }) => {
 
   useEffect(() => {
     if (board) {
-      debouncedSave()
+      if (data._saveImmediate) {
+        save()
+      } else {
+        debouncedSave()
+      }
     } else {
       window.localStorage.setItem(STORAGE_KEY, JSON.stringify(data))
     }
@@ -75,7 +91,10 @@ export const DataProvider = ({ board, children }) => {
 
   const wrappedApi = {}
   for (const key in api) {
-    wrappedApi[key] = (args) => setData((d) => api[key](d, args))
+    wrappedApi[key] = (args, saveImmediate) => setData((d) => ({
+      ...api[key](d, args),
+      _saveImmediate: saveImmediate,
+    }))
   }
 
   return (

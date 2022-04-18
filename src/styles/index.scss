@@ -70,6 +70,10 @@ input[type="text"] {
   .c-card-btn {
     @apply hover:bg-gray-100;
   }
+
+  &.card--board .card__btn {
+    @apply bg-slate-200;
+  }
 }
 
 .card-red {
@@ -81,6 +85,10 @@ input[type="text"] {
 
   .ql-blank::before {
     @apply text-red-800/60;
+  }
+
+  &.card--board .card__btn {
+    @apply bg-red-300;
   }
 }
 
@@ -94,6 +102,10 @@ input[type="text"] {
   .ql-blank::before {
     @apply text-blue-800/60;
   }
+
+  &.card--board .card__btn {
+    @apply bg-blue-300;
+  }
 }
 
 .card-yellow {
@@ -105,6 +117,10 @@ input[type="text"] {
 
   .ql-blank::before {
     @apply text-amber-800/60;
+  }
+
+  &.card--board .card__btn {
+    @apply bg-amber-300;
   }
 }
 
@@ -118,6 +134,10 @@ input[type="text"] {
   .ql-blank::before {
     @apply text-emerald-800/60;
   }
+
+  &.card--board .card__btn {
+    @apply bg-emerald-300;
+  }
 }
 
 .card-purple {
@@ -129,5 +149,9 @@ input[type="text"] {
 
   .ql-blank::before {
     @apply text-violet-800/60;
+  }
+
+  &.card--board .card__btn {
+    @apply bg-violet-300;
   }
 }

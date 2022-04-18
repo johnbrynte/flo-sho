@@ -3,22 +3,15 @@ import TurndownService from "turndown"
 import { marked } from "marked"
 import Quill from 'quill'
 import QuillMarkdown from 'quilljs-markdown'
-import useDebounce from "../hooks/useDebounce";
-import { FiMoreHorizontal } from "react-icons/fi";
-import { Draggable } from 'react-beautiful-dnd'
 import { useData } from "../hooks/data/useData";
-import { SectionMenu } from "./SectionMenu";
-import { colors } from "./ColorPicker";
 
-export const SectionComponent = ({ section, index, newSection, movePointLeft, movePointRight, lift }) => {
+export const SectionComponent = ({ section, newSection, movePointLeft, movePointRight, lift }) => {
   const { api: { deleteSection, updateSection, focusSection } } = useData()
   const quill = useRef(null)
   const textareaRef = useRef(null)
   const markdownRef = useRef('')
   const [text, setText] = useState(section.text)
   const [hasFocused, setHasFocused] = useState(false)
-
-  const sectionColor = colors.find((c) => c.name === section.color)
 
   // const updateDebounce = useDebounce((markdown) => {
   //   onUpdate({
@@ -194,32 +187,9 @@ export const SectionComponent = ({ section, index, newSection, movePointLeft, mo
   }
 
   return (
-    <Draggable draggableId={`section-${section.id}`} index={index} type="section">
-      {(provided, snapshot) => (
-        <div
-          className={`flex flex-col pb-1 rounded-md flex-shrink-0 mb-2 w-80 card-${sectionColor?.name ?? 'white'}`}
-          ref={provided.innerRef}
-          {...provided.draggableProps}
-        >
-          {/* <div className="text-xs text-gray-600">{section.id} (index {index})</div> */}
-          <div
-            className="flex flex-col items-stretch w-full min-h-20"
-            ref={textareaRef}
-          />
-          <div className="flex justify-end px-2 pt-2">
-            <div
-              className="c-card-btn flex-1 cursor-grab flex items-center justify-center h-6 rounded-sm"
-              {...provided.dragHandleProps}
-            >
-              <FiMoreHorizontal />
-            </div>
-            <div>
-              <SectionMenu section={section} />
-            </div>
-          </div>
-          {provided.placeholder}
-        </div>
-      )}
-    </Draggable>
+    <div
+      className="flex flex-col items-stretch w-full min-h-20"
+      ref={textareaRef}
+    />
   );
 };

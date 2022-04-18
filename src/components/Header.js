@@ -5,7 +5,7 @@ import { UserContext } from "../util/UserContext"
 import { Popover } from "./Popover"
 import { SearchBoard } from "./SearchBoard"
 import { InputDialog } from "./InputDialog"
-import { FiPlus, FiSearch } from "react-icons/fi"
+import { FiLogOut, FiPlus, FiSearch } from "react-icons/fi"
 
 export const Header = () => {
   const { loading, user, login: loginTrigger, loginError, logout, register: registerTrigger, registerError } = useContext(UserContext)
@@ -80,7 +80,13 @@ export const Header = () => {
             <SearchBoard open={searchOpen} openChange={setSearchOpen} />
           </div>
           <div className="flex items-center">
-            Logged in as {user.name} ({user.email}) <button className="c-btn ml-2" onClick={logout}>Log out</button>
+            <div className="text-sm">{user.name} <span className="text-gray-400">/ {user.email}</span></div>
+            <button className="c-btn ml-2" onClick={logout}>
+              <span className="flex items-center">
+                <FiLogOut />
+                <span className="ml-2">Log out</span>
+              </span>
+            </button>
           </div>
         </div>
       ) : !loading && (

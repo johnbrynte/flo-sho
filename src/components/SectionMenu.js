@@ -1,12 +1,13 @@
 import { Menu, Transition } from '@headlessui/react'
+import { marked } from 'marked'
 import { Fragment, useState } from 'react'
-import { FiMenu, FiTrash2 } from 'react-icons/fi'
+import { FiMenu, FiColumns, FiTrash2 } from 'react-icons/fi'
 import { useData } from '../hooks/data/useData'
 import { ColorPicker } from './ColorPicker'
 import { Modal } from './Modal'
 
 export const SectionMenu = ({ section }) => {
-  const { api: { deleteSection } } = useData()
+  const { api: { deleteSection, updateSection } } = useData()
   const [showDeleteModal, setShowDeleteModal] = useState(false)
 
   const closeDeleteModal = () => {
@@ -16,11 +17,25 @@ export const SectionMenu = ({ section }) => {
   const items = [
     {
       icon: (<FiTrash2 />),
-      text: "Delete card",
+      text: section.type === 'board' ? "Delete board" : "Delete card",
       action: () => {
         setShowDeleteModal(true)
       },
     },
+    ...(section.type === 'board' ? [] : [{
+      icon: (<FiColumns />),
+      text: "Turn into board",
+      action: () => {
+        var e = document.createElement('div')
+        e.innerHTML = marked.parse(section.text)
+
+        updateSection({
+          id: section.id,
+          name: e.textContent.split('\n')[0],
+          type: 'board',
+        }, true)
+      },
+    }]),
     {
       button: ({ section }) => (
         <ColorPicker section={section} />

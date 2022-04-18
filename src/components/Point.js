@@ -1,10 +1,10 @@
 import { useCallback, useEffect, useRef, useState } from "react"
-import { SectionComponent } from "./Section";
 import { FiMoreHorizontal, FiTrash2, FiPlus } from "react-icons/fi";
 import { Droppable } from 'react-beautiful-dnd'
 import { useData } from "../hooks/data/useData";
 import { Draggable } from "react-beautiful-dnd";
 import { Modal } from "./Modal";
+import { SectionWrapper } from "./SectionWrapper";
 
 export const PointComponent = ({ point, index, lift }) => {
   const { api: { addSection, deletePoint, updatePoint, movePoint } } = useData()
@@ -97,7 +97,7 @@ export const PointComponent = ({ point, index, lift }) => {
               <div className="flex flex-col w-80"
                 ref={provided.innerRef}>
                 {point.sections.map((section, index) => (
-                  <SectionComponent key={section.id}
+                  <SectionWrapper key={section.id}
                     index={index}
                     section={section}
                     lift={lift} />
