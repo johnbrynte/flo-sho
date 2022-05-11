@@ -8,7 +8,7 @@ import { InputDialog } from "./InputDialog"
 import { FiLogOut, FiPlus, FiSearch } from "react-icons/fi"
 
 export const Header = () => {
-  const { loading, user, login: loginTrigger, loginError, logout, register: registerTrigger, registerError } = useContext(UserContext)
+  const { loading, user, authError, login: loginTrigger, loginError, logout, register: registerTrigger, registerError } = useContext(UserContext)
   const { error: createError, trigger: createBoardApi } = useApi('post', 'boards/new')
   const [_, dispatchBoard] = useBoard()
   const [searchOpen, setSearchOpen] = useState(false)
@@ -131,6 +131,12 @@ export const Header = () => {
               )}
             </Popover>
           </div>
+
+          { authError && (
+            <div className="ml-4 text-red-500 text-sm flex items-center">
+              { authError.code === 0 && <>Unknown authentication error</> }
+            </div>
+          )}
         </div>
       )}
     </div>

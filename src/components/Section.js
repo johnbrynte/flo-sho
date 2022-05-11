@@ -10,6 +10,7 @@ export const SectionComponent = ({ section, newSection, movePointLeft, movePoint
   const quill = useRef(null)
   const textareaRef = useRef(null)
   const markdownRef = useRef('')
+  const turndownService = useRef(null)
   const [text, setText] = useState(section.text)
   const [hasFocused, setHasFocused] = useState(false)
 
@@ -20,15 +21,21 @@ export const SectionComponent = ({ section, newSection, movePointLeft, movePoint
   //   })
   // }, 500)
 
-  const blurEditor = () => {
-    quill.current?.root.blur();
-  }
+  // const blurEditor = () => {
+  //   quill.current?.root.blur();
+  // }
+
+  useEffect(() => {
+    turndownService.current = new TurndownService({
+      headingStyle: 'atx',
+      codeBlockStyle: 'fenced',
+    })
+  }, [])
 
   useEffect(() => {
     if (text === section.text) {
       return
     }
-    console.log("text updated")
     setFromMarkdown(section.text)
   }, [section.text])
 
@@ -49,83 +56,32 @@ export const SectionComponent = ({ section, newSection, movePointLeft, movePoint
     const options = {
       placeholder: 'Some text here...',
       modules: {
+        clink: true,
         keyboard: {
           bindings: {
             tab: {
               key: 9,
               handler: () => true
-            },
-            newSection: {
-              key: 13,
-              shortKey: true,
-              handler: function (range, context) {
-                newSection()
-              }
-            },
-            moveUp: {
-              altKey: true,
-              key: 38,
-              handler: () => {
-                const api = lift(`${section.id}`)
-                api?.moveUp()
-                api?.drop()
-                focusSection({ id: section.id })
-              }
-            },
-            moveDown: {
-              altKey: true,
-              key: 40,
-              handler: () => {
-                const api = lift(`${section.id}`)
-                api?.moveDown()
-                api?.drop()
-                focusSection({ id: section.id })
-              }
-            },
-            moveLeft: {
-              altKey: true,
-              key: 37,
-              handler: () => {
-                const api = lift(`${section.id}`)
-                api?.moveLeft()
-                api?.drop()
-                focusSection({ id: section.id })
-              }
-            },
-            moveRight: {
-              altKey: true,
-              key: 39,
-              handler: () => {
-                const api = lift(`${section.id}`)
-                api?.moveRight()
-                api?.drop()
-                focusSection({ id: section.id })
-              }
-            },
-            movePointLeft: {
-              shortKey: true,
-              shiftKey: true,
-              key: 37,
-              handler: () => {
-                movePointLeft()
-                blurEditor()
-                focusSection({ id: section.id })
-              }
-            },
-            movePointRight: {
-              shortKey: true,
-              shiftKey: true,
-              key: 39,
-              handler: () => {
-                movePointRight()
-                blurEditor()
-                focusSection({ id: section.id })
-              }
-            },
+            }
           }
         }
       }
     }
+
+    // From https://github.com/quilljs/quill/issues/1966#issuecomment-370638285
+    Quill.register('modules/clink', (quill) => {
+      let currentLink = null;
+      quill.container.addEventListener('mouseover', (evt) => {
+        if (evt.target.tagName === 'A') {
+          currentLink = evt.target;
+          currentLink.setAttribute('contenteditable', false);
+        } else if (currentLink) {
+          currentLink.removeAttribute('contenteditable');
+          currentLink = null;
+        }
+      });
+    });
+
     const editor = new Quill(textareaRef.current, options)
     editor.on('text-change', onTextChange)
     editor.on('selection-change', onSelectionChange)
@@ -145,20 +101,30 @@ export const SectionComponent = ({ section, newSection, movePointLeft, movePoint
     if (!quill.current) {
       return
     }
-
-    // to markdown
-    var turndownService = new TurndownService({
-      headingStyle: 'atx',
-      codeBlockStyle: 'fenced',
-    })
+ 
     // quill stores code blocks as
     //   <pre class="ql-syntax" spellcheck="false">...</pre>
     // but turndown expects
     //   <pre><code>...</code></pre>
     const html = quill.current.root.innerHTML
-      .replace(/<pre(?:[^>]*)>([^<>]+)<\/pre>/g, "<pre><code>$1</code></pre>")
-    markdownRef.current = turndownService.turndown(html)
+    .replace(/<pre(?:[^>]*)>([^<>]+)<\/pre>/g, "<pre><code>$1</code></pre>")
+    let markdown = turndownService.current.turndown(html)
+    
+    // check if the HTML parser finds links
+    if (delta.ops.some((o) => o.insert === ' ' || o.insert === '\n' || o.insert?.length > 1)) {
+      const parsedMarkdown = parseMarkdown(markdown)
+      if (markdown !== parsedMarkdown) {
+        markdown = parsedMarkdown
+        const selection = quill.current.getSelection()
+        setFromMarkdown(markdown)
+        setTimeout(() => {
+          quill.current.setSelection(selection.index)
+        })
+      }
+    }
 
+    // update markdown
+    markdownRef.current = markdown
     setText(markdownRef.current)
     updateSection({
       id: section.id,
@@ -184,6 +150,11 @@ export const SectionComponent = ({ section, newSection, movePointLeft, movePoint
     const html = marked.parse(markdown?.replace(/\s\s\n\n/g, "<p><br/></p>\n\n") ?? '')
     const delta = quill.current.clipboard.convert(html)
     quill.current.setContents(delta, 'silent')
+  }
+
+  const parseMarkdown = (markdown) => {
+    const html = marked.parse(markdown?.replace(/\s\s\n\n/g, "<p><br/></p>\n\n") ?? '')
+    return turndownService.current.turndown(html)
   }
 
   return (

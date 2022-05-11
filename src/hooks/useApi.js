@@ -28,14 +28,20 @@ export const useApi = (method, path, customToken) => {
       })
       const json = await data.json()
       if (data.status !== 200) {
-        setError(json.error)
+        setError({
+          code: data.status,
+          error: json.error,
+        })
         setResult(null)
       } else {
         setResult(json)
         return json
       }
     } catch (e) {
-      setError(e)
+      setError({
+        code: 0,
+        error: e.getMessage()
+      })
       console.error(e)
     } finally {
       setLoading(false)

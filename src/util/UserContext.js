@@ -24,7 +24,7 @@ export const UserProvider = ({ children }) => {
   const { trigger: logoutTrigger } = useApi("post", "user/logout", token)
   const { result: loginData, error: loginError, trigger: login } = useApi("post", "user/login", token)
   const { result: registerData, error: registerError, trigger: register } = useApi("post", "user/register", token)
-  const { loading, result: user, trigger: auth } = useApi("post", "user/auth", token)
+  const { error: authError, loading, result: user, trigger: auth } = useApi("post", "user/auth", token)
 
   const loggedIn = !!user
 
@@ -53,7 +53,7 @@ export const UserProvider = ({ children }) => {
   }, [token])
 
   return (<>
-    <UserContext.Provider value={{ token, loggedIn, loading, user, login, loginError, register, registerError, logout }}>
+    <UserContext.Provider value={{ token, loggedIn, loading, authError, user, login, loginError, register, registerError, logout }}>
       {children}
     </UserContext.Provider>
   </>)
