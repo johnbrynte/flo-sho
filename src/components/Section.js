@@ -113,7 +113,7 @@ export const SectionComponent = ({ section, newSection, movePointLeft, movePoint
     // check if the HTML parser finds links
     if (delta.ops.some((o) => o.insert === ' ' || o.insert === '\n' || o.insert?.length > 1)) {
       const parsedMarkdown = parseMarkdown(markdown)
-      if (markdown !== parsedMarkdown) {
+      if (markdown !== parsedMarkdown && parsedMarkdown.length > markdown.length) {
         markdown = parsedMarkdown
         const selection = quill.current.getSelection()
         setFromMarkdown(markdown)
