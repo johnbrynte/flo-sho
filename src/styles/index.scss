@@ -74,6 +74,10 @@ input[type="text"] {
   &.card--board .card__btn {
     @apply bg-slate-200;
   }
+
+  .ql-editor code, .ql-editor pre.ql-syntax {
+    @apply bg-slate-100;
+  }
 }
 
 .card-red {
@@ -88,6 +92,10 @@ input[type="text"] {
   }
 
   &.card--board .card__btn {
+    @apply bg-red-300;
+  }
+
+  .ql-editor code, .ql-editor pre.ql-syntax {
     @apply bg-red-300;
   }
 }
@@ -106,6 +114,10 @@ input[type="text"] {
   &.card--board .card__btn {
     @apply bg-blue-300;
   }
+
+  .ql-editor code, .ql-editor pre.ql-syntax {
+    @apply bg-blue-300;
+  }
 }
 
 .card-yellow {
@@ -121,6 +133,10 @@ input[type="text"] {
 
   &.card--board .card__btn {
     @apply bg-amber-300;
+  }
+
+  .ql-editor code, .ql-editor pre.ql-syntax {
+    @apply bg-amber-200;
   }
 }
 
@@ -138,6 +154,10 @@ input[type="text"] {
   &.card--board .card__btn {
     @apply bg-emerald-300;
   }
+
+  .ql-editor code, .ql-editor pre.ql-syntax {
+    @apply bg-emerald-300;
+  }
 }
 
 .card-purple {
@@ -152,6 +172,10 @@ input[type="text"] {
   }
 
   &.card--board .card__btn {
+    @apply bg-violet-300;
+  }
+
+  .ql-editor code, .ql-editor pre.ql-syntax {
     @apply bg-violet-300;
   }
 }
