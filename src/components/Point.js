@@ -65,14 +65,15 @@ export const PointComponent = ({ point, index, lift }) => {
   return (<>
     <Draggable draggableId={`point-${point.id}`} index={index} type="point">
       {(provided, snapshot) => (
-        <div className="bg-slate-100 rounded-md p-1 mr-2"
+        <div className="bg-slate-100 rounded-md px-1 pb-1 mr-2"
           ref={provided.innerRef}
           {...provided.draggableProps}
         >
-          <div className="flex items-center justify-between mb-2">
+          <div className="flex items-center justify-between mb-2 sticky top-0 z-10 bg-slate-100">
             <input type="text"
               ref={inputRef}
               className={editName ? 'c-input' : 'bg-transparent'}
+              style={editName ? {} : {paddingLeft: '0'}}
               placeholder="New point"
               value={newPointText}
               onChange={(e) => setNewPointText(e.target.value)}
@@ -94,7 +95,7 @@ export const PointComponent = ({ point, index, lift }) => {
           </div>
           <Droppable droppableId={`point-${point.id}`} type="section">
             {(provided, snapshot) => (
-              <div className="flex flex-col w-80"
+              <div className="flex flex-col w-80 pb-10"
                 ref={provided.innerRef}>
                 {point.sections.map((section, index) => (
                   <SectionWrapper key={section.id}

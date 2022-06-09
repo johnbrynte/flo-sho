@@ -6,7 +6,7 @@ import { BoardProvider } from "./hooks/useBoard";
 
 export default function App() {
   return (
-    <div className="flex flex-col h-full">
+    <div className="flex flex-col h-full overflow-hidden bg-slate-100">
       <UserProvider>
         <BoardProvider>
           <Header />

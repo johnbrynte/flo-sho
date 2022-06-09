@@ -106,10 +106,10 @@ export const Timeline = () => {
       ]}>
       <Droppable droppableId={`timeline`} type="point" direction="horizontal">
         {(provided, snapshot) => (
-          <div className="flex-1"
+          <div className="flex-1 overflow-auto overscroll-auto touch-none"
             ref={provided.innerRef}>
             <div
-              className="flex px-4 pt-2 h-full pb-10 overflow-x-scroll overscroll-auto touch-none"
+              className="flex px-4 h-full pb-10"
               ref={scrollEl}
               onScroll={onScroll}
             >
@@ -121,7 +121,7 @@ export const Timeline = () => {
               ))}
               {provided.placeholder}
               <div className="flex flex-col">
-                <div className="w-80">
+                <div className="w-80 sticky top-0 bg-slate-100">
                   <input className="c-input" type="text"
                     placeholder="Add a stack of cards..."
                     value={newPointText}

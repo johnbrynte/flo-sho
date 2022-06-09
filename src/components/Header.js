@@ -50,7 +50,7 @@ export const Header = () => {
   }
 
   return (
-    <div className="relative flex items-center px-1 mx-1 my-1 h-10 rounded-lg z-20 bg-white shadow-sm">
+    <div className="relative flex flex-shrink-0 items-center px-1 mx-1 my-1 h-10 rounded-lg z-20 bg-white shadow-sm">
       {user ? (
         <div className="flex flex-1 justify-between items-center animate-appear">
           <div className="flex items-center">
